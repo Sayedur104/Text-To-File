@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor to File</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px 30px;
+            width: 100%;
+            max-width: 600px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #6a11cb;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .CodeMirror {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            height: 250px;
+            margin-bottom: 15px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #6a11cb;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #4c0d94;
+        }
+        footer {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #aaa;
+        }
+        footer a {
+            color: #6a11cb;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Code Editor to File</h1>
+        <textarea id="codeEditor"></textarea>
+        <input type="text" id="fileName" placeholder="Enter file name (without extension)" required>
+        <select id="fileType">
+            <option value="txt">Text File (.txt)</option>
+            <option value="html">HTML File (.html)</option>
+            <option value="js">JavaScript File (.js)</option>
+            <option value="py">Python File (.py)</option>
+            <option value="css">CSS File (.css)</option>
+            <option value="json">JSON File (.json)</option>
+            <option value="xml">XML File (.xml)</option>
+            <option value="java">Java File (.java)</option>
+            <option value="c">C File (.c)</option>
+            <option value="cpp">C++ File (.cpp)</option>
+            <option value="php">PHP File (.php)</option>
+        </select>
+        <button onclick="downloadFile()">Download File</button>
+        <footer>
+            Created with ❤️ by <a href="https://wa.me/+8801797850421">Sayedur 104</a>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script>
+        // Initialize CodeMirror editor
+        const editor = CodeMirror.fromTextArea(document.getElementById('codeEditor'), {
+            lineNumbers: true,
+            mode: 'javascript', // Default mode
+            theme: 'default',
+        });
+
+        // Change editor mode based on file type
+        document.getElementById('fileType').addEventListener('change', function () {
+            const fileType = this.value;
+            let mode = 'javascript';
+            if (fileType === 'py') mode = 'python';
+            else if (fileType === 'html') mode = 'htmlmixed';
+            else if (fileType === 'css') mode = 'css';
+            else if (fileType === 'xml') mode = 'xml';
+            editor.setOption('mode', mode);
+        });
+
+        // Download file
+        function downloadFile() {
+            const userText = editor.getValue().trim();
+            const fileName = document.getElementById('fileName').value.trim();
+            const fileType = document.getElementById('fileType').value;
+
+            if (!userText) {
+                alert("Please write some code to generate the file!");
+                return;
+            }
+            if (!fileName) {
+                alert("Please provide a file name.");
+                return;
+            }
+
+            const fileContent = new Blob([userText], { type: `text/plain` });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(fileContent);
+            link.download = `${fileName}.${fileType}`;
+            link.click();
+        }
+    </script>
+</body>
+</html>
